@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2024.2.5),
-    on Fri 28 Mar 2025 02:21:20 PM CDT
+    on Fri 28 Mar 2025 02:29:06 PM CDT
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -397,6 +397,13 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
     )
     # Run 'Begin Experiment' code from record_code
     playback_gain = 1
+    record_text = visual.TextStim(win=win, name='record_text',
+        text='Press spacebar when finished recording.',
+        font='Arial',
+        pos=(0, 0), draggable=False, height=0.05, wrapWidth=None, ori=0.0, 
+        color='white', colorSpace='rgb', opacity=None, 
+        languageStyle='LTR',
+        depth=-3.0);
     
     # --- Initialize components for Routine "playback" ---
     playback_text = visual.TextStim(win=win, name='playback_text',
@@ -520,7 +527,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         # create an object to store info about Routine record
         record = data.Routine(
             name='record',
-            components=[record_key, record_mic],
+            components=[record_key, record_mic, record_text],
         )
         record.status = NOT_STARTED
         continueRoutine = True
@@ -625,6 +632,26 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
                     record_mic.status = FINISHED
                     # stop recording with record_mic
                     record_mic.stop()
+            
+            # *record_text* updates
+            
+            # if record_text is starting this frame...
+            if record_text.status == NOT_STARTED and tThisFlip >= 0.0-frameTolerance:
+                # keep track of start time/frame for later
+                record_text.frameNStart = frameN  # exact frame index
+                record_text.tStart = t  # local t and not account for scr refresh
+                record_text.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(record_text, 'tStartRefresh')  # time at next scr refresh
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'record_text.started')
+                # update status
+                record_text.status = STARTED
+                record_text.setAutoDraw(True)
+            
+            # if record_text is active this frame...
+            if record_text.status == STARTED:
+                # update params
+                pass
             
             # check for quit (typically the Esc key)
             if defaultKeyboard.getKeys(keyList=["escape"]):
