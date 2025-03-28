@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2024.2.5),
-    on Thu 27 Mar 2025 10:09:09 PM CDT
+    on Fri 28 Mar 2025 02:21:20 PM CDT
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -126,7 +126,7 @@ def setupData(expInfo, dataDir=None):
     thisExp = data.ExperimentHandler(
         name=expName, version='',
         extraInfo=expInfo, runtimeInfo=None,
-        originPath='/storage/work/ForOthers/andanderson/mic_test/mic_test.py',
+        originPath='/group/jbinder/work/jheffernan/ForOthers/andanderson/mic_test/mic_test.py',
         savePickle=True, saveWideText=True,
         dataFileName=dataDir + os.sep + filename, sortColumns='time'
     )
@@ -270,7 +270,7 @@ def setupDevices(expInfo, thisExp, win):
     deviceManager.addDevice(
         deviceClass='psychopy.hardware.microphone.MicrophoneDevice',
         deviceName='record_mic',
-        index=5,
+        index=3,
         maxRecordingSize=24000.0,
         channels=None, 
         sampleRateHz=48000, 
@@ -279,7 +279,7 @@ def setupDevices(expInfo, thisExp, win):
     deviceManager.addDevice(
         deviceName='playback_sound',
         deviceClass='psychopy.hardware.speaker.SpeakerDevice',
-        index=5.0
+        index=3.0
     )
     # return True if completed successfully
     return True
@@ -395,6 +395,8 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         recordingFolder=record_micRecFolder,
         recordingExt='wav'
     )
+    # Run 'Begin Experiment' code from record_code
+    playback_gain = 1
     
     # --- Initialize components for Routine "playback" ---
     playback_text = visual.TextStim(win=win, name='playback_text',
@@ -437,6 +439,23 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         color='white', colorSpace='rgb', opacity=None, 
         languageStyle='LTR',
         depth=-1.0);
+    as_button = visual.ButtonStim(win, 
+        text='Continue', font='Arvo',
+        pos=(0, -0.142),
+        letterHeight=0.05,
+        size=(0.4, 0.1), 
+        ori=0.0
+        ,borderWidth=0.0,
+        fillColor='darkgrey', borderColor='black',
+        color='white', colorSpace='rgb',
+        opacity=None,
+        bold=True, italic=False,
+        padding=None,
+        anchor='center',
+        name='as_button',
+        depth=-2
+    )
+    as_button.buttonClock = core.Clock()
     
     # create some handy timers
     
@@ -469,7 +488,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
     # set up handler to look after randomisation of conditions etc
     sound_testing = data.TrialHandler2(
         name='sound_testing',
-        nReps=1.0, 
+        nReps=10.0, 
         method='random', 
         extraInfo=expInfo, 
         originPath=-1, 
@@ -664,6 +683,8 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         sound_testing.addData(
             'record_mic.clip', record_mic.recordingFolder / record_mic.getClipFilename(tag)
         )
+        # Run 'End Routine' code from record_code
+        record_micClip.gain(playback_gain)
         # the Routine "record" was not non-slip safe, so reset the non-slip timer
         routineTimer.reset()
         
@@ -821,12 +842,14 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         # create an object to store info about Routine adjust_sound
         adjust_sound = data.Routine(
             name='adjust_sound',
-            components=[as_textbox, as_text],
+            components=[as_textbox, as_text, as_button],
         )
         adjust_sound.status = NOT_STARTED
         continueRoutine = True
         # update component parameters for each repeat
         as_textbox.reset()
+        # reset as_button to account for continued clicks & clear times on/off
+        as_button.reset()
         # store start times for adjust_sound
         adjust_sound.tStartRefresh = win.getFutureFlipTime(clock=globalClock)
         adjust_sound.tStart = globalClock.getTime(format='float')
@@ -852,7 +875,7 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         if isinstance(sound_testing, data.TrialHandler2) and thisSound_testing.thisN != sound_testing.thisTrial.thisN:
             continueRoutine = False
         adjust_sound.forceEnded = routineForceEnded = not continueRoutine
-        while continueRoutine and routineTimer.getTime() < 10.0:
+        while continueRoutine:
             # get current time
             t = routineTimer.getTime()
             tThisFlip = win.getFutureFlipTime(clock=routineTimer)
@@ -880,20 +903,6 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
                 # update params
                 pass
             
-            # if as_textbox is stopping this frame...
-            if as_textbox.status == STARTED:
-                # is it time to stop? (based on global clock, using actual start)
-                if tThisFlipGlobal > as_textbox.tStartRefresh + 10.0-frameTolerance:
-                    # keep track of stop time/frame for later
-                    as_textbox.tStop = t  # not accounting for scr refresh
-                    as_textbox.tStopRefresh = tThisFlipGlobal  # on global time
-                    as_textbox.frameNStop = frameN  # exact frame index
-                    # add timestamp to datafile
-                    thisExp.timestampOnFlip(win, 'as_textbox.stopped')
-                    # update status
-                    as_textbox.status = FINISHED
-                    as_textbox.setAutoDraw(False)
-            
             # *as_text* updates
             
             # if as_text is starting this frame...
@@ -913,20 +922,43 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
             if as_text.status == STARTED:
                 # update params
                 pass
+            # *as_button* updates
             
-            # if as_text is stopping this frame...
-            if as_text.status == STARTED:
-                # is it time to stop? (based on global clock, using actual start)
-                if tThisFlipGlobal > as_text.tStartRefresh + 10-frameTolerance:
-                    # keep track of stop time/frame for later
-                    as_text.tStop = t  # not accounting for scr refresh
-                    as_text.tStopRefresh = tThisFlipGlobal  # on global time
-                    as_text.frameNStop = frameN  # exact frame index
-                    # add timestamp to datafile
-                    thisExp.timestampOnFlip(win, 'as_text.stopped')
-                    # update status
-                    as_text.status = FINISHED
-                    as_text.setAutoDraw(False)
+            # if as_button is starting this frame...
+            if as_button.status == NOT_STARTED and tThisFlip >= 0-frameTolerance:
+                # keep track of start time/frame for later
+                as_button.frameNStart = frameN  # exact frame index
+                as_button.tStart = t  # local t and not account for scr refresh
+                as_button.tStartRefresh = tThisFlipGlobal  # on global time
+                win.timeOnFlip(as_button, 'tStartRefresh')  # time at next scr refresh
+                # add timestamp to datafile
+                thisExp.timestampOnFlip(win, 'as_button.started')
+                # update status
+                as_button.status = STARTED
+                win.callOnFlip(as_button.buttonClock.reset)
+                as_button.setAutoDraw(True)
+            
+            # if as_button is active this frame...
+            if as_button.status == STARTED:
+                # update params
+                pass
+                # check whether as_button has been pressed
+                if as_button.isClicked:
+                    if not as_button.wasClicked:
+                        # if this is a new click, store time of first click and clicked until
+                        as_button.timesOn.append(as_button.buttonClock.getTime())
+                        as_button.timesOff.append(as_button.buttonClock.getTime())
+                    elif len(as_button.timesOff):
+                        # if click is continuing from last frame, update time of clicked until
+                        as_button.timesOff[-1] = as_button.buttonClock.getTime()
+                    if not as_button.wasClicked:
+                        # end routine when as_button is clicked
+                        continueRoutine = False
+                    if not as_button.wasClicked:
+                        # run callback code when as_button is clicked
+                        pass
+            # take note of whether as_button was clicked, so that next frame we know if clicks are new
+            as_button.wasClicked = as_button.isClicked and as_button.status == STARTED
             
             # check for quit (typically the Esc key)
             if defaultKeyboard.getKeys(keyList=["escape"]):
@@ -968,19 +1000,32 @@ def run(expInfo, thisExp, win, globalClock=None, thisSession=None):
         adjust_sound.tStopRefresh = tThisFlipGlobal
         thisExp.addData('adjust_sound.stopped', adjust_sound.tStop)
         sound_testing.addData('as_textbox.text',as_textbox.text)
-        # Run 'End Routine' code from as_code
-        thisExp.addData('tb_pos0', as_text.getPos()[0])
-        thisExp.addData('tb_pos1', as_text.getPos()[1])
-        # using non-slip timing so subtract the expected duration of this Routine (unless ended on request)
-        if adjust_sound.maxDurationReached:
-            routineTimer.addTime(-adjust_sound.maxDuration)
-        elif adjust_sound.forceEnded:
-            routineTimer.reset()
+        sound_testing.addData('as_button.numClicks', as_button.numClicks)
+        if as_button.numClicks:
+           sound_testing.addData('as_button.timesOn', as_button.timesOn)
+           sound_testing.addData('as_button.timesOff', as_button.timesOff)
         else:
-            routineTimer.addTime(-10.000000)
+           sound_testing.addData('as_button.timesOn', "")
+           sound_testing.addData('as_button.timesOff', "")
+        # Run 'End Routine' code from as_code
+        # get textbox position
+        # thisExp.addData('tb_pos0', as_text.getPos()[0])
+        # thisExp.addData('tb_pos1', as_text.getPos()[1])
+        
+        try:
+            playback_gain = float(as_textbox.text)
+        except ValueError:
+            playback_gain = 1
+        thisExp.addData('playback_gain', playback_gain)
+        
+        # get polygon position
+        # thisExp.addData('as_polygon0', as_polygon.getPos()[0])
+        # thisExp.addData('as_polygon1', as_polygon.getPos()[1])
+        # the Routine "adjust_sound" was not non-slip safe, so reset the non-slip timer
+        routineTimer.reset()
         thisExp.nextEntry()
         
-    # completed 1.0 repeats of 'sound_testing'
+    # completed 10.0 repeats of 'sound_testing'
     
     if thisSession is not None:
         # if running in a Session with a Liaison client, send data up to now
