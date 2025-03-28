@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 This experiment was created using PsychoPy3 Experiment Builder (v2024.2.5),
-    on Fri 28 Mar 2025 02:29:06 PM CDT
+    on Fri 28 Mar 2025 05:27:11 PM CDT
 If you publish work using this script the most relevant publication is:
 
     Peirce J, Gray JR, Simpson S, MacAskill M, Höchenberger R, Sogo H, Kastman E, Lindeløv JK. (2019) 
@@ -270,16 +270,14 @@ def setupDevices(expInfo, thisExp, win):
     deviceManager.addDevice(
         deviceClass='psychopy.hardware.microphone.MicrophoneDevice',
         deviceName='record_mic',
-        index=3,
+        index=None,
         maxRecordingSize=24000.0,
-        channels=None, 
-        sampleRateHz=48000, 
     )
     # create speaker 'playback_sound'
     deviceManager.addDevice(
         deviceName='playback_sound',
         deviceClass='psychopy.hardware.speaker.SpeakerDevice',
-        index=3.0
+        index=-1
     )
     # return True if completed successfully
     return True

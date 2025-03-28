@@ -119,7 +119,7 @@
       </KeyboardComponent>
       <MicrophoneComponent name="record_mic" plugin="None">
         <Param val="auto" valType="str" updates="None" name="channels"/>
-        <Param val="3" valType="code" updates="None" name="device"/>
+        <Param val="None" valType="code" updates="None" name="device"/>
         <Param val="" valType="str" updates="None" name="deviceLabel"/>
         <Param val="False" valType="bool" updates="None" name="disabled"/>
         <Param val="" valType="code" updates="None" name="durationEstim"/>
@@ -240,7 +240,7 @@
         <Param val="playback_sound" valType="code" updates="None" name="name"/>
         <Param val="True" valType="bool" updates="None" name="saveStartStop"/>
         <Param val="$record_micClip" valType="str" updates="set every repeat" name="sound"/>
-        <Param val="3.0" valType="code" updates="None" name="speakerIndex"/>
+        <Param val="-1" valType="code" updates="None" name="speakerIndex"/>
         <Param val="" valType="code" updates="None" name="startEstim"/>
         <Param val="time (s)" valType="str" updates="None" name="startType"/>
         <Param val="0.0" valType="code" updates="None" name="startVal"/>
