@@ -45,6 +45,8 @@ expName = 'mic_test'  # from the Builder filename that created this script
 expInfo = {
     'participant': f"{randint(0, 999999):06.0f}",
     'session': '001',
+    'device_mic': '',
+    'device_speaker': '',
     'date|hid': data.getDateStr(),
     'expName|hid': expName,
     'psychopyVersion|hid': psychopyVersion,
@@ -112,6 +114,10 @@ def setupData(expInfo, dataDir=None):
     for key, val in expInfo.copy().items():
         newKey, _ = data.utils.parsePipeSyntax(key)
         expInfo[newKey] = expInfo.pop(key)
+
+    # cast specific info items to a type
+    expInfo['device_mic'] = int(expInfo['device_mic'])
+    expInfo['device_speaker'] = int(expInfo['device_speaker'])
     
     # data file name stem = absolute path + name; later add .psyexp, .csv, .log, etc
     if dataDir is None:
@@ -270,14 +276,14 @@ def setupDevices(expInfo, thisExp, win):
     deviceManager.addDevice(
         deviceClass='psychopy.hardware.microphone.MicrophoneDevice',
         deviceName='record_mic',
-        index=None,
+        index=expInfo['device_mic'],
         maxRecordingSize=24000.0,
     )
     # create speaker 'playback_sound'
     deviceManager.addDevice(
         deviceName='playback_sound',
         deviceClass='psychopy.hardware.speaker.SpeakerDevice',
-        index=-1
+        index=expInfo['device_speaker']
     )
     # return True if completed successfully
     return True
